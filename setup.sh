@@ -31,7 +31,7 @@ RMPIVERS=0.6-3
 
 ## ===================================================================
 ## Set Vars 2
-GCCVERS=$(gcc --versicon | grep ^gcc | sed 's/^.* //g' | sed 's/)//g')
+GCCVERS=$(gcc --version | grep ^gcc | sed 's/^.* //g' | sed 's/)//g')
 export OMPIVERS=1.6.5
 ## We can set this up to use different version of OpenMPI for different 
 ## servers
@@ -67,12 +67,9 @@ while true; do
 [y/n]" yn
     case $yn in
         [Yy]* )
-            module load openmpi/gcc/${OMPIVERS}/64
-            R CMD INSTALL --configure-args="--with-Rmpi-include=/usr/mpi/gcc/openmpi-${OMPIVERS}/include
-                --with-Rmpi-libpath=/usr/mpi/gcc/openmpi-${OMPIVERS}/lib64
-                --with-Rmpi-type=OPENMPI" \
-                    rmpi.tar.gz
-
+            module load openmpi/gcc/64/${OMPIVERS}-mlnx-ofed 
+            # export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-1.6.5
+            R CMD INSTALL --configure-args=--with-mpi=/usr/mpi/gcc/openmpi-${OMPIVERS} rmpi.tar.gz
             break;;
 
         [Nn]* )
