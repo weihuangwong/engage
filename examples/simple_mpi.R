@@ -4,9 +4,10 @@
 ## Libraries
 require(foreach)
 require(doMPI)
+require(Rmpi)
 require(iterators)
 
-## Init MPI backend
+## Initialise MPI backend
 cl <- startMPIcluster()
 registerDoMPI(cl)
 
@@ -26,7 +27,7 @@ regress <- function(x) {
 
 ## Run
 system.time(coefs <- foreach(a=iter(D), .combine='cbind') %dopar% regress(a))
-print(coefs)
+save(coefs, file="test_parallel.RData")
 
 ## Cleanup
 closeCluster(cl)
