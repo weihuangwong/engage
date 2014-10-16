@@ -10,7 +10,8 @@ cl <- startMPIcluster()
 registerDoMPI(cl)
 
 ## Run
-foreach(i=1:10, .combine='c') %dopar% print(i)
+numbers <- foreach(i=1:10, .combine='c') %dopar% return(i)
+print(numbers)
 
 ## Cleanup
 closeCluster(cl)
