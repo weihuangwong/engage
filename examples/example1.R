@@ -17,6 +17,8 @@ cluster <- makeMPIcluster(8)            # assumes we requested 2x5 cores
                                         # and because of MPI idiosyncracy,
                                         # are using only 2x(5-1) cores
 
+print(np)
+
 ## =============================================================================
 ## Main
 # Print the hostname for each cluster member 
@@ -30,11 +32,10 @@ print(unlist(names))
 
 # Compute row sums in parallel using all processes, 
 # then a grand sum at the end on the master process 
-parallelSum <- function(m, n) 
-{ 
-A <- matrix(rnorm(m*n), nrow = m, ncol = n) 
-row.sums <- parApply(cluster, A, 1, sum) 
-print(sum(row.sums)) 
+parallelSum <- function(m, n)  { 
+    A <- matrix(rnorm(m*n), nrow = m, ncol = n) 
+    row.sums <- parApply(cluster, A, 1, sum) 
+    print(sum(row.sums)) 
 } 
 
 parallelSum(500, 500) 
