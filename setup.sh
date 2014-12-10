@@ -32,7 +32,7 @@ RMPIVERS=0.6-3
 ## ===================================================================
 ## Set Vars 2
 GCCVERS=$(gcc --version | grep ^gcc | sed 's/^.* //g' | sed 's/)//g')
-export OMPIVERS=1.6.5
+export OMPIVERS=1.8.3
 ## We can set this up to use different version of OpenMPI for different 
 ## servers
 
@@ -48,11 +48,12 @@ echo ""
 ## Rmpi DL
 while true; do
     read -p "\
-@ Do you need to DL Rmpi?
+@ Do you need to download Rmpi?
 [y/n]" yn
     case $yn in
         [Yy]* )
-            wget http://www.stats.uwo.ca/faculty/yu/Rmpi/download/linux/Rmpi_${RMPIVERS}.tar.gz -O rmpi.tar.gz;
+            mkdir ~/R_LIBS
+            wget http://www.stats.uwo.ca/faculty/yu/Rmpi/download/linux/Rmpi_${RMPIVERS}.tar.gz -O rmpi.tar.gz -P ~/R_LIBS;
             break;;
 
         [Nn]* ) break;;
@@ -67,9 +68,9 @@ while true; do
 [y/n]" yn
     case $yn in
         [Yy]* )
-            module load openmpi/gcc/64/${OMPIVERS}-mlnx-ofed 
-            # export LD_LIBRARY_PATH=/usr/mpi/gcc/openmpi-1.6.5
-            R CMD INSTALL --configure-args=--with-mpi=/usr/mpi/gcc/openmpi-${OMPIVERS} rmpi.tar.gz
+            module use /cm/shared/modulefiles/engaging 
+            module add openmpi/${OMPIVERS}
+            R CMD INSTALL -l ~/R_LIBS rmpi.tar.gz --configure-args=--with-mpi=/cm/shared/engaging/openmpi/${OMPIVERS}
             break;;
 
         [Nn]* )
